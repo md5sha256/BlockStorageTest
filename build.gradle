@@ -1,0 +1,42 @@
+plugins {
+    id("java")
+}
+
+group = "io.github.md5sha256"
+version = "1.0-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+    maven {
+        name = "papermc-repo"
+        url = "https://repo.papermc.io/repository/maven-public/"
+    }
+    maven {
+        name = "sonatype"
+        url = "https://oss.sonatype.org/content/groups/public/"
+    }
+}
+
+dependencies {
+    implementation("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
+    implementation("org.openjdk.jmh:jmh-core:1.36")
+    annotationProcessor("org.openjdk.jmh:jmh-generator-annprocess:1.36")
+}
+
+def targetJavaVersion = 17
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release.set(targetJavaVersion)
+}
+
+processResources {
+    filteringCharset("UTF-8")
+}
