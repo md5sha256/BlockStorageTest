@@ -1,5 +1,7 @@
 plugins {
     id("java")
+    id("application")
+    id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 group = "io.github.md5sha256"
@@ -39,4 +41,12 @@ tasks.withType(JavaCompile).configureEach {
 
 processResources {
     filteringCharset("UTF-8")
+}
+
+assemble {
+    dependsOn(shadowJar)
+}
+
+application {
+    mainClass = "io.github.md5sha256.blockstoragetest.Main"
 }
